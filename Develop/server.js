@@ -9,6 +9,8 @@ app.use(express.json())
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', api);
-
+app.use('/api', notesRoutes);
+app.use('/', indexHTMLRoutes);
 app.use(express.static('public'));
+
+app.listen(PORT, () => console.log(`listening on port: ${PORT} `))

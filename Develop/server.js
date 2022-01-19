@@ -24,11 +24,49 @@ app.listen(PORT, () => console.log(`listening on port: ${PORT} `))
 app.use(express.static('../public'))
 
 app.get('/api/notes', (req, res) => {
-    readFileAsync('../db/db.json', 'utf8').then((data) => {
+    readFileAsync('../db/db.json', 'utf8').then(function (data) {
         notes = [].concat(JSON.parse(data))
-        res.json(notes)
-    }
+        res.json(notes);
+
+    })
 })
+
+app.post('/api/notes', (req, res) => {
+    const note = req.body;
+    readFileAsync('../db/db.json', 'utf8').then(function (data) {
+        const notes = [].concat(JSON.parse(data));
+        note.id = notes.length + 1
+        notes.push(note);
+        return notes
+    })
+        .then(function (notes) {
+            writeFileAsync('../db/db.json', JSON.stringify(notes))
+            res.json(note)
+        })
+
+})
+app.delete('/api/notes/:id', function (req, res) {
+    const idTodelete = parseInt(req.params.id)
+    readFileAsync('../db/db.json', 'utf8').then(function (data) {
+        const notes = [].concat(JSON.parse(data))
+        const newNotesDaata = []
+        for (let i = 0; i < notes.length; i++) {
+            if (idTodelete !== notes[i].id) {
+                newNotesDaata.push(notes[i])
+
+            }
+        }
+
+        return newNotesDaata
+    })
+        .then(function (notes) {
+            writeFileAsync('../db/db.jdon', JSON.stringify(notes))
+            res.send('succcess')
+        })
+})
+})
+
+
 
 
 

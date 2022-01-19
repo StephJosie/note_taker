@@ -21,6 +21,14 @@ app.use(express.json())
 
 app.listen(PORT, () => console.log(`listening on port: ${PORT} `))
 
+app.use(express.static('../public'))
+
+app.get('/api/notes', (req, res) => {
+    readFileAsync('../db/db.json', 'utf8').then((data) => {
+        notes = [].concat(JSON.parse(data))
+        res.json(notes)
+    }
+})
 
 
 
